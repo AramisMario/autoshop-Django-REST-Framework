@@ -11,9 +11,9 @@ class CustomerSerializer(serializers.ModelSerializer):
 class RecepcionistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Receptionist
-        fields = ('identificationnumber','firstname','lastname','email','password')
+        fields = ('identificationnumber','firstname','lastname','email','password','socialsecuritynumber')
 
 class MechanicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mechanics
-        fields = ('identificationnumber','firstname','lastname','email','password')
+        fields = ('identificationnumber','firstname','lastname','email','password','socialsecuritynumber')

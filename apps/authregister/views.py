@@ -20,9 +20,9 @@ class SaveCustomer(APIView):
     def post(self,request, format=None):
         data = request.data.copy()
         data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
-        customer = CustomerSerializer(data = data)
-        if customer.is_valid():
-            customer.save()
+        mecanico = MechanicsSerializer(data = data)
+        if mecanico.is_valid():
+            mecanico.save()
             return Response({"mensaje":"guardado"},status = status.HTTP_201_CREATED)
         return Response({"mensaje":"algo fue mal"},status = status.HTTP_400_BAD_REQUEST)
 
@@ -30,10 +30,10 @@ class Login(APIView):
     parser_classess = (FormParser,)
     authentication_classes = ()
     def post(self,request,format = None):
-        data = request.data.copy()
-        data['password'] = hashlib.sha256(data['password'].encode()).hexdigest()
+        # data = request.data.copy()
+        request.data['password'] = hashlib.sha256(request.data['password'].encode()).hexdigest()
         try:
-            customer = Customers.objects.get(email = data['email'], password = data['password'])
+            customer = Customers.objects.get(email = request.data['email'], password = request.data['password'])
         except ObjectDoesNotExist:
             return Response({"mensaje":"No exite el usuario"})
         return Response({'token':customer.token})

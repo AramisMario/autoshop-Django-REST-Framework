@@ -10,20 +10,24 @@ from datetime import datetime
 from datetime import timedelta
 import jwt, json
 import os
+
+
 class Admins(models.Model):
     email = models.CharField(max_length=60)
-    password = models.TextField()
+    password = models.CharField(max_length=64)
 
     class Meta:
         managed = False
         db_table = 'admins'
+
+
 
 class Customers(models.Model):
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
     firstname = models.CharField(db_column='firstName', max_length=60)  # Field name made lowercase.
     lastname = models.CharField(db_column='lastName', max_length=60)  # Field name made lowercase.
     email = models.CharField(max_length=60)
-    password = models.TextField()
+    password = models.CharField(max_length=64)
 
     class Meta:
         managed = False
@@ -45,24 +49,28 @@ class Customers(models.Model):
         return self.generate_jwt_token()
 
 
+
+
 class Mechanics(models.Model):
-    id = models.IntegerField(primary_key=True)
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
     firstname = models.CharField(db_column='firstName', max_length=60)  # Field name made lowercase.
     lastname = models.CharField(db_column='lastName', max_length=60)  # Field name made lowercase.
     email = models.CharField(max_length=60)
-    password = models.TextField()
+    password = models.CharField(max_length=64)
+    socialsecuritynumber = models.CharField(db_column='socialSecurityNumber', max_length=11)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'mechanics'
+
 
 class Receptionist(models.Model):
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
     firstname = models.CharField(db_column='firstName', max_length=60)  # Field name made lowercase.
     apellido = models.CharField(max_length=60)
     email = models.CharField(max_length=60)
-    password = models.TextField()
+    password = models.CharField(max_length=64)
+    socialsecuritynumber = models.CharField(db_column='socialSecurityNumber', max_length=11)  # Field name made lowercase.
 
     class Meta:
         managed = False

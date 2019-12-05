@@ -1,3 +1,4 @@
 autoshop/__pycache__
 apps/authregister/__pycache__
 apps/authregister/migrations
+apps/service/migrations
