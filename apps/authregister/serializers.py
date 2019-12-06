@@ -2,6 +2,7 @@ from apps.authregister.models import *
 from rest_framework import serializers
 import hashlib
 
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customers

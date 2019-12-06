@@ -6,6 +6,9 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from apps.authregister.models import Receptionist
+from apps.authregister.models import Customers
+from apps.authregister.models import Mechanics
 
 
 class Belongings(models.Model):
@@ -20,7 +23,7 @@ class Details(models.Model):
     description = models.TextField()
     task = models.ForeignKey('Task', models.DO_NOTHING)
     services = models.ForeignKey('Services', models.DO_NOTHING)
-    mechanics = models.ForeignKey('Mechanics', models.DO_NOTHING)
+    mechanics = models.ForeignKey(Mechanics, models.DO_NOTHING)
 
     class Meta:
         managed = False

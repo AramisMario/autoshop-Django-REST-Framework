@@ -11,7 +11,6 @@ from datetime import timedelta
 import jwt, json
 import os
 
-
 class Admins(models.Model):
     email = models.CharField(max_length=60)
     password = models.CharField(max_length=64)
@@ -48,9 +47,6 @@ class Customers(models.Model):
     def token(self):
         return self.generate_jwt_token()
 
-
-
-
 class Mechanics(models.Model):
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
     firstname = models.CharField(db_column='firstName', max_length=60)  # Field name made lowercase.
@@ -62,7 +58,6 @@ class Mechanics(models.Model):
     class Meta:
         managed = False
         db_table = 'mechanics'
-
 
 class Receptionist(models.Model):
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
