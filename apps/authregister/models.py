@@ -22,7 +22,7 @@ class Admins(models.Model):
     is_authenticated = False
 
     def generate_jwt_token(self):
-        dt = datetime.now() + timedelta(minutes = 1)
+        dt = datetime.now() + timedelta(minutes = 3)
         token = jwt.encode({
             'id':self.pk,
             'email':self.email,
@@ -49,7 +49,7 @@ class Customers(models.Model):
     is_authenticated = False
 
     def generate_jwt_token(self):
-        dt = datetime.now() + timedelta(minutes = 1)
+        dt = datetime.now() + timedelta(minutes = 3)
         token = jwt.encode({
             'id':self.pk,
             'email':self.email,
@@ -76,7 +76,7 @@ class Mechanics(models.Model):
     is_authenticated = False
 
     def generate_jwt_token(self):
-        dt = datetime.now() + timedelta(minutes = 1)
+        dt = datetime.now() + timedelta(minutes = 3)
         token = jwt.encode({
             'id':self.pk,
             'email':self.email,
@@ -103,7 +103,7 @@ class Receptionist(models.Model):
     is_authenticated = False
 
     def generate_jwt_token(self):
-        dt = datetime.now() + timedelta(minutes = 1)
+        dt = datetime.now() + timedelta(minutes = 3)
         token = jwt.encode({
             'id':self.pk,
             'email':self.email,

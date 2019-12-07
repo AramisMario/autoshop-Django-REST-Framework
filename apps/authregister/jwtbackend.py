@@ -1,9 +1,10 @@
 from rest_framework.authentication import get_authorization_header, BaseAuthentication
-from apps.authregister.models import Customers
+from apps.authregister.models import Customers, Admins, Mechanics, Receptionist
 from rest_framework import status, exceptions
 import os
 import jwt, json
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
 
 class JWTAuthentication(BaseAuthentication):
 
@@ -33,9 +34,38 @@ class JWTAuthentication(BaseAuthentication):
             payload = jwt.decode(token,os.environ["SECRETKEY"])
         except jwt.ExpiredSignatureError:
             return None
+        except jwt.InvalidSignatureError:
+            return None
         else:
             email = payload["email"]
-            customerId = payload["id"]
-            customer = Customers.objects.get(email = email)
-            customer.is_authenticated = True
-            return (customer,token)
+            try:
+                customer = Customers.objects.get(email = email)
+            except ObjectDoesNotExist:
+                customer = None
+            try:
+                admin = Admins.objects.get(email = email)
+            except ObjectDoesNotExist:
+                admin = None
+            try:
+                mechanic = Mechanics.objects.get(email = email)
+            except ObjectDoesNotExist:
+                mechanic = None
+            try:
+                receptionist = Receptionist.objects.get(email = email)
+            except ObjectDoesNotExist:
+                receptionist = None
+            finally:
+                if customer != None:
+                    customer.is_authenticated = True
+                    return (customer,token)
+                elif admin != None :
+                    admin.is_authenticated = True
+                    return (admin,token)
+                elif mechanic != None:
+                    mechanic.is_authenticated = True
+                    return (mechanic,token)
+                elif receptionist != None:
+                    receptionist.is_authenticated = True
+                    return (receptionist,token)
+                else:
+                    return None

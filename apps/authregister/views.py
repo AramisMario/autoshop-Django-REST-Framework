@@ -12,6 +12,7 @@ import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from apps.authregister.jwtbackend import JWTAuthentication
+from apps.authregister.customPermissionClass import AdminPermission, CustomersPermission, MechanicsPermissions, ReceptionistPermissions
 # Create your views here.
 
 class SaveSomeRol(APIView):
@@ -36,7 +37,7 @@ class Login(APIView):
             try:
                 customer = Customers.objects.get(email = data['email'], password = data['password'])
             except ObjectDoesNotExist:
-                return Response({"mensaje":"No exite el usuario"})
+                return Response({"mensaje":"No exite el customer"})
             else:
                 return Response({'token':customer.token})
 
@@ -44,7 +45,7 @@ class Login(APIView):
             try:
                 mechanic = Mechanics.objects.get(email = data['email'], password = data['password'])
             except ObjectDoesNotExist:
-                return Response({"mensaje":"No exite el usuario"})
+                return Response({"mensaje":"No exite el mechanic"})
             else:
                 return Response({'token':mechanic.token})
 
@@ -52,7 +53,7 @@ class Login(APIView):
             try:
                 receptionist = Receptionist.objects.get(email = data['email'], password = data['password'])
             except ObjectDoesNotExist:
-                return Response({"mensaje":"No exite el usuario"})
+                return Response({"mensaje":"No exite el receptionist"})
             else:
                 return Response({'token':receptionist.token})
 
@@ -60,13 +61,31 @@ class Login(APIView):
             try:
                 admin = Admins.objects.get(email = data['email'], password = data['password'])
             except ObjectDoesNotExist:
-                return Response({"mensaje":"No exite el usuario"})
+                return Response({"mensaje":"No exite el admin"})
             else:
-                return Response({'token':admins.token})
+                return Response({'token':admin.token})
         return Response({'mensaje':'algo fue mal'})
 
-class AuthPrueba(APIView):
+class AuthPruebaReceptionist(APIView):
     autentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (ReceptionistPermissions,)
     def get(self,request, format = None):
-        return Response({"mensaje":"te autenticaste"})
+        return Response({"mensaje":"te autenticaste receptionist"})
+
+class AuthPruebaMechanic(APIView):
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = (MechanicsPermissions,)
+    def get(self,request, format = None):
+        return Response({"mensaje":"te autenticaste mechanic"})
+
+class AuthPruebaCustomer(APIView):
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = (CustomersPermission,)
+    def get(self,request, format = None):
+        return Response({"mensaje":"te autenticaste customer"})
+
+class AuthPruebaAdmin(APIView):
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = (AdminPermission,)
+    def get(self,request, format = None):
+        return Response({"mensaje":"te autenticaste admin"})
