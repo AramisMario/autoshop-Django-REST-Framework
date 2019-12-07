@@ -8,7 +8,6 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customers
         fields = ('identificationnumber','firstname','lastname','email','password')
 
-
 class RecepcionistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Receptionist
@@ -18,3 +17,8 @@ class MechanicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mechanics
         fields = ('identificationnumber','firstname','lastname','email','password','socialsecuritynumber')
+
+class AdminsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Admins
+        fields = ('email','password')

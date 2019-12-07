@@ -13,11 +13,9 @@ from rest_framework import status
 
 class SaveVehicle(APIView):
 
-    authentication_classes = ()
-    permission_classes = ()
     parser_classes = (FormParser,)
-    #authentication_classes = (JWTAuthentication,)
-    #permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format = None):
         vehicle = VehicleSerializer(data = request.data)

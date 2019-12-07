@@ -19,6 +19,20 @@ class Admins(models.Model):
         managed = False
         db_table = 'admins'
 
+    is_authenticated = False
+
+    def generate_jwt_token(self):
+        dt = datetime.now() + timedelta(minutes = 1)
+        token = jwt.encode({
+            'id':self.pk,
+            'email':self.email,
+            'exp':dt
+        },os.environ['SECRETKEY'])
+        return token
+
+    @property
+    def token(self):
+        return self.generate_jwt_token()
 
 
 class Customers(models.Model):
@@ -59,10 +73,25 @@ class Mechanics(models.Model):
         managed = False
         db_table = 'mechanics'
 
+    is_authenticated = False
+
+    def generate_jwt_token(self):
+        dt = datetime.now() + timedelta(minutes = 1)
+        token = jwt.encode({
+            'id':self.pk,
+            'email':self.email,
+            'exp':dt
+        },os.environ['SECRETKEY'])
+        return token
+
+    @property
+    def token(self):
+        return self.generate_jwt_token()
+
 class Receptionist(models.Model):
     identificationnumber = models.CharField(db_column='identificationNumber', max_length=30)  # Field name made lowercase.
     firstname = models.CharField(db_column='firstName', max_length=60)  # Field name made lowercase.
-    apellido = models.CharField(max_length=60)
+    lastname = models.CharField(max_length=60)
     email = models.CharField(max_length=60)
     password = models.CharField(max_length=64)
     socialsecuritynumber = models.CharField(db_column='socialSecurityNumber', max_length=11)  # Field name made lowercase.
@@ -70,3 +99,18 @@ class Receptionist(models.Model):
     class Meta:
         managed = False
         db_table = 'receptionist'
+
+    is_authenticated = False
+
+    def generate_jwt_token(self):
+        dt = datetime.now() + timedelta(minutes = 1)
+        token = jwt.encode({
+            'id':self.pk,
+            'email':self.email,
+            'exp':dt
+        },os.environ['SECRETKEY'])
+        return token
+
+    @property
+    def token(self):
+        return self.generate_jwt_token()
