@@ -12,20 +12,8 @@ import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from apps.authregister.jwtbackend import JWTAuthentication
-from apps.authregister.customPermissionClass import AdminPermission, CustomersPermission, MechanicsPermissions, ReceptionistPermissions
+from apps.authregister.customPermissionClasses import AdminPermission, CustomersPermission, MechanicsPermissions, ReceptionistPermissions
 # Create your views here.
-
-class SaveSomeRol(APIView):
-    parser_classes = (FormParser,)
-    authentication_classes = ()
-    def post(self,request, format=None):
-        data = request.data.copy()
-        data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
-        admin = AdminsSerializer(data = data)
-        if admin.is_valid():
-            admin.save()
-            return Response({"mensaje":"guardado"},status = status.HTTP_201_CREATED)
-        return Response({"mensaje":"algo fue mal"},status = status.HTTP_400_BAD_REQUEST)
 
 class Login(APIView):
     parser_classes = (FormParser,)
