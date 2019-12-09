@@ -5,3 +5,5 @@ apps/service/migrations
 apps/service/__pycache__
 apps/administration/migrations
 apps/administration/__pycache__
+apps/reception/migrations
+apps/reception/__pycache__

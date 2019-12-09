@@ -69,7 +69,6 @@ class Skills(models.Model):
 
 class Task(models.Model):
     task = models.CharField(max_length=100)
-    estimatedtime = models.CharField(db_column='estimatedTime', max_length=45)  # Field name made lowercase.
     tag = models.CharField(max_length=45)
 
     class Meta:
@@ -80,8 +79,9 @@ class Task(models.Model):
 class Tasksbyref(models.Model):
     price = models.FloatField()
     tdescription = models.TextField()
-    refvehicle = models.ForeignKey(Refvehicle, models.DO_NOTHING)
     task = models.ForeignKey(Task, models.DO_NOTHING)
+    estimatedtime = models.CharField(db_column='estimatedTime', max_length=45)  # Field name made lowercase.
+    refsallowed = models.TextField(db_column='refsAllowed')  # Field name made lowercase. This field type is a guess.
 
     class Meta:
         managed = False

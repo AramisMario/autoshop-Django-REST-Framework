@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/',include('apps.administration.urls')),
     path('register/',include('apps.authregister.urls')),
     path('service/',include('apps.service.urls')),
+    path('reception/',include('apps.reception.urls')),
 ]
