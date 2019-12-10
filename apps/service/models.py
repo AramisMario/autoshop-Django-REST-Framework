@@ -9,6 +9,7 @@ from django.db import models
 from apps.authregister.models import Receptionist
 from apps.authregister.models import Customers
 from apps.authregister.models import Mechanics
+from apps.service.customModelManagers.taskmanager import TaskManager
 
 
 class Belongings(models.Model):
@@ -70,6 +71,9 @@ class Skills(models.Model):
 class Task(models.Model):
     task = models.CharField(max_length=100)
     tag = models.CharField(max_length=45)
+
+    objects = models.Manager()
+    customManager = TaskManager()
 
     class Meta:
         managed = False

@@ -15,7 +15,19 @@ from apps.authregister.jwtbackend import JWTAuthentication
 from apps.authregister.customPermissionClasses import AdminPermission, CustomersPermission, MechanicsPermissions, ReceptionistPermissions
 # Create your views here.
 
-class Login(APIView):
+class SignUp(APIView):
+    parser_classess = (MultiPartParser,)
+    authentication_classes = ()
+    def post(self,request, format=None):
+        data = request.data.copy()
+        data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
+        customer = CustomerSerializer(data = data)
+        if customer.is_valid():
+            customer.save()
+            return Response({"mensaje":"guardado"},status = status.HTTP_201_CREATED)
+        return Response({"mensaje":"algo fue mal"},status = status.HTTP_400_BAD_REQUEST)
+
+class SignIn(APIView):
     parser_classes = (FormParser,)
     authentication_classes = ()
     def post(self,request,format = None):

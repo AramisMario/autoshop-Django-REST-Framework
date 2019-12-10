@@ -3,6 +3,7 @@ apps/authregister/__pycache__
 apps/authregister/migrations
 apps/service/migrations
 apps/service/__pycache__
+apps/service/customModelManagers/__pycache__
 apps/administration/migrations
 apps/administration/__pycache__
 apps/reception/migrations

@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser
 from apps.service.models import *
 from apps.service.serializers import *
+from apps.reception.serializers import TaskSerializer, TaskbyrefSerializer
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import FormParser
+from rest_framework.parsers import FormParser, JSONParser
 from rest_framework import status
 # Create your views here.
 
@@ -35,3 +36,37 @@ class ShowVehicles(APIView):
         vehiclesSerialized = VehicleSerializer(vehicles, many = True)
         context = {"vehicles":vehiclesSerialized.data}
         return Response(context, status.HTTP_200_OK)
+
+class RepairFilter(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    parser_classes = (JSONParser,)
+    render_classes = (JSONRenderer,)
+
+    def post(self, request, format = None):
+        repairs = Tasksbyref.objects.all()
+        repairsSerialized = TaskbyrefSerializer(repairs,many = True)
+        context = {"repairs":repairsSerialized.data}
+        return Response(context,status = status.HTTP_200_OK)
+
+class RepairFilterByRef(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    parser_classes = (JSONParser,)
+    render_classes = (JSONRenderer,)
+
+    def post(self, request, format = None):
+        tasks = Task.customManager.tasksbyref(request.data["ref"])
+        return Response(tasks,status = status.HTTP_200_OK)
+
+class  RepairFilterByTag(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    parser_classes = (JSONParser,)
+    render_classes = (JSONRenderer,)
+
+    def post(self, request, format = None):
+        repairs = Task.objects.filter(tag__contains = request.data["tag"])
+        repairsSerialized = TaskSerializer(repairs,many = True)
+        context = {"repairs":repairsSerialized.data}
+        return Response(context,status = status.HTTP_200_OK)
