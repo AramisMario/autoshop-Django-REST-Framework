@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser
 from apps.service.models import *
 from apps.service.serializers import *
-from apps.reception.serializers import TaskSerializer, TaskbyrefSerializer
+from apps.reception.serializers import TasksSerializer, TasksbyrefSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework import status
@@ -45,7 +45,7 @@ class RepairFilter(APIView):
 
     def post(self, request, format = None):
         repairs = Tasksbyref.objects.all()
-        repairsSerialized = TaskbyrefSerializer(repairs,many = True)
+        repairsSerialized = TasksbyrefSerializer(repairs,many = True)
         context = {"repairs":repairsSerialized.data}
         return Response(context,status = status.HTTP_200_OK)
 
@@ -56,7 +56,7 @@ class RepairFilterByRef(APIView):
     render_classes = (JSONRenderer,)
 
     def post(self, request, format = None):
-        tasks = Task.customManager.tasksbyref(request.data["ref"])
+        tasks = Tasks.customManager.tasksbyref(request.data["ref"])
         return Response(tasks,status = status.HTTP_200_OK)
 
 class  RepairFilterByTag(APIView):
@@ -66,7 +66,7 @@ class  RepairFilterByTag(APIView):
     render_classes = (JSONRenderer,)
 
     def post(self, request, format = None):
-        repairs = Task.objects.filter(tag__contains = request.data["tag"])
-        repairsSerialized = TaskSerializer(repairs,many = True)
+        repairs = Tasks.objects.filter(tag__contains = request.data["tag"])
+        repairsSerialized = TasksSerializer(repairs,many = True)
         context = {"repairs":repairsSerialized.data}
         return Response(context,status = status.HTTP_200_OK)
