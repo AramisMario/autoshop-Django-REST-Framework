@@ -9,7 +9,7 @@ from django.db import models
 from apps.authregister.models import Receptionist
 from apps.authregister.models import Customers
 from apps.authregister.models import Mechanics
-from apps.service.customModelManagers.taskmanager import TaskManager
+from apps.service.customModelManagers.tasksmanager import TasksManager
 
 
 class Belongings(models.Model):
@@ -22,7 +22,7 @@ class Belongings(models.Model):
 
 class Details(models.Model):
     description = models.TextField()
-    task = models.ForeignKey('Task', models.DO_NOTHING)
+    task = models.ForeignKey('Tasks', models.DO_NOTHING)
     services = models.ForeignKey('Services', models.DO_NOTHING)
     mechanics = models.ForeignKey(Mechanics, models.DO_NOTHING)
 
@@ -60,7 +60,6 @@ class Services(models.Model):
 
 
 class Skills(models.Model):
-    idskils = models.AutoField(primary_key=True)
     skill = models.CharField(max_length=45)
 
     class Meta:
@@ -68,22 +67,22 @@ class Skills(models.Model):
         db_table = 'skills'
 
 
-class Task(models.Model):
+class Tasks(models.Model):
     task = models.CharField(max_length=100)
-    tag = models.CharField(max_length=45)
+    tag = models.CharField(max_length=100)
 
     objects = models.Manager()
-    customManager = TaskManager()
+    customManager = TasksManager()
 
     class Meta:
         managed = False
-        db_table = 'task'
+        db_table = 'tasks'
 
 
 class Tasksbyref(models.Model):
     price = models.FloatField()
     tdescription = models.TextField()
-    task = models.ForeignKey(Task, models.DO_NOTHING)
+    tasks = models.ForeignKey(Tasks, models.DO_NOTHING)
     estimatedtime = models.CharField(db_column='estimatedTime', max_length=45)  # Field name made lowercase.
     refsallowed = models.TextField(db_column='refsAllowed')  # Field name made lowercase. This field type is a guess.
 
