@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from apps.service.models import Tasksbyref
-from apps.service.models import Tasks
+from apps.service.models import Tasksbyref, Tasks, Details, Services
+
 
 class TasksbyrefSerializer(serializers.ModelSerializer):
     tasks = serializers.PrimaryKeyRelatedField(queryset = Tasks.objects.all())
@@ -19,3 +19,25 @@ class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tasks
         fields = ('task','tag')
+
+class DetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Details
+        fields = ('description','tasks','services','mechanics')
+
+    def create(self,validated_data):
+        details = Details.objects.create(description = validated_data["description"],
+        tasks = validated_data["tasks"], services = validated_data["services"],
+        mechanics = validated_data["mechanics"])
+        return details
+
+class ServicesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Services
+        fields = ('id','indate','outdate','vehicles','receptionist')
+
+    def create(self, validated_data):
+        service = Services.objects.create(indate = validated_data["indate"],
+        outdate = validated_data["outdate"], vehicles = validated_data["vehicles"],
+        receptionist = validated_data["receptionist"])
+        return service

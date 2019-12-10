@@ -22,7 +22,7 @@ class Belongings(models.Model):
 
 class Details(models.Model):
     description = models.TextField()
-    task = models.ForeignKey('Tasks', models.DO_NOTHING)
+    tasks = models.ForeignKey('Tasks', models.DO_NOTHING)
     services = models.ForeignKey('Services', models.DO_NOTHING)
     mechanics = models.ForeignKey(Mechanics, models.DO_NOTHING)
 
@@ -53,7 +53,6 @@ class Services(models.Model):
     outdate = models.DateTimeField(db_column='outDate')  # Field name made lowercase.
     vehicles = models.ForeignKey('Vehicles', models.DO_NOTHING)
     receptionist = models.ForeignKey(Receptionist, models.DO_NOTHING)
-
     class Meta:
         managed = False
         db_table = 'services'
