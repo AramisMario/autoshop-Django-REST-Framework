@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.authregister',
     'apps.service',
     'apps.reception',
+    'apps.administration',
 ]
 
 REST_FRAMEWORK = {

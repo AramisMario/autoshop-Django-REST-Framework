@@ -3,6 +3,8 @@ from apps.reception.views import *
 
 
 urlpatterns = [
-    path('savetbr/',SaveTaskByRef.as_view()),
-    path('savet/',SaveTask.as_view()),
+    path('savetbr/',SaveTasksByRef.as_view()),
+    path('savet/',SaveTasks.as_view()),
+    path('savedtl/',SaveDetails.as_view()),
+    path('services/',ServicesView.as_view()),
 ]
