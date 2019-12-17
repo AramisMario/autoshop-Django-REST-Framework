@@ -76,7 +76,7 @@ class EstimatedOutDate(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
 
-    def get(self, request, format = None):
-        service = Services.objects.get(pk = 3)
-        service.estimatedOutDate()
-        return Response({"context":"algo"})
+    def get(self, request, id, format = None):
+        service = Services.objects.get(pk = id)
+        eOutTime = service.estimatedOutDate()
+        return Response({"eOutTime":eOutTime},status = status.HTTP_200_OK)
