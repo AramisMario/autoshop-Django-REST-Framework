@@ -89,3 +89,11 @@ class RepairStatus(APIView):
         vehicle = Vehicles.objects.get(pk = id)
         repstatus = vehicle.status()
         return Response(repstatus,status = status.HTTP_200_OK)
+
+class ServicesHistory(APIView):
+    parser_classes = (JSONParser,)
+    render_classes = (JSONRenderer,)
+
+    def get(self, request, id, format = None):
+        history = Services.customManager.historyByCustomer(id)
+        return Response(history, status = status.HTTP_200_OK)
