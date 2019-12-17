@@ -67,7 +67,6 @@ class Services(models.Model):
         cursor.execute("""select tbf.estimatedTime from services as s join details as d on s.id = d.services_id
         join tasks as t on t.id = d.tasks_id join tasksbyref as tbf on t.id = tbf.tasks_id and s.id = %s ;""",[self.pk])
         sum = datetime.datetime.now()
-        print(sum)
         for row in cursor:
             info = json.loads(row[0])
             sum = sum + datetime.timedelta(days = info["days"], hours = info["hours"], minutes = info["minutes"])
