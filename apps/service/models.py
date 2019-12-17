@@ -10,6 +10,9 @@ from apps.authregister.models import Receptionist
 from apps.authregister.models import Customers
 from apps.authregister.models import Mechanics
 from apps.service.customModelManagers.tasksmanager import TasksManager
+from django.db import connection
+import datetime
+import json
 
 
 class Belongings(models.Model):
@@ -25,6 +28,7 @@ class Details(models.Model):
     tasks = models.ForeignKey('Tasks', models.DO_NOTHING)
     services = models.ForeignKey('Services', models.DO_NOTHING)
     mechanics = models.ForeignKey(Mechanics, models.DO_NOTHING)
+    finished = models.IntegerField()
 
     class Meta:
         managed = False
@@ -50,12 +54,25 @@ class Refvehicle(models.Model):
 
 class Services(models.Model):
     indate = models.DateTimeField(db_column='inDate')  # Field name made lowercase.
-    outdate = models.DateTimeField(db_column='outDate')  # Field name made lowercase.
+    outdate = models.DateTimeField(db_column='outDate', blank=True, null=True)  # Field name made lowercase.
     vehicles = models.ForeignKey('Vehicles', models.DO_NOTHING)
     receptionist = models.ForeignKey(Receptionist, models.DO_NOTHING)
     class Meta:
         managed = False
         db_table = 'services'
+
+    def estimatedOutDate(self):
+        times = []
+        cursor = connection.cursor()
+        cursor.execute("""select tbf.estimatedTime from services as s join details as d on s.id = d.services_id
+        join tasks as t on t.id = d.tasks_id join tasksbyref as tbf on t.id = tbf.tasks_id and s.id = %s ;""",[self.pk])
+        sum = datetime.datetime.now()
+        print(sum)
+        for row in cursor:
+            info = json.loads(row[0])
+            sum = sum + datetime.timedelta(days = info["days"], hours = info["hours"], minutes = info["minutes"])
+        return sum
+
 
 
 class Skills(models.Model):
@@ -82,7 +99,7 @@ class Tasksbyref(models.Model):
     price = models.FloatField()
     tdescription = models.TextField()
     tasks = models.ForeignKey(Tasks, models.DO_NOTHING)
-    estimatedtime = models.CharField(db_column='estimatedTime', max_length=45)  # Field name made lowercase.
+    estimatedtime = models.TextField(db_column='estimatedTime') # Field name made lowercase. This field type is a guess.
     refsallowed = models.TextField(db_column='refsAllowed')  # Field name made lowercase. This field type is a guess.
 
     class Meta:

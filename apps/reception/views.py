@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from apps.reception.serializers import TasksbyrefSerializer, TasksSerializer, DetailsSerializer, ServicesSerializer
-from apps.service.models import Services
+from apps.service.models import Services, Tasks, Tasksbyref
 import json
 # Create your views here.
 
