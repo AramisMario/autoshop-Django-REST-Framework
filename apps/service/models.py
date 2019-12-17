@@ -122,3 +122,14 @@ class Vehicles(models.Model):
     class Meta:
         managed = False
         db_table = 'vehicles'
+
+    def status(self):
+        cursor = connection.cursor()
+        cursor.execute("""select t.task,d.finished from vehicles as v join services as s on v.id = s.vehicles_id
+        join details as d on s.id = d.services_id join tasks as t on t.id = d.tasks_id where v.id = %s;""",[self.pk])
+        info = {"repairs":[]}
+        for row in cursor:
+            state = "Terminado" if row[1] == 1 else "No terminado"
+            info["repairs"].append({"reparacion":row[0],"estado":state})
+
+        return info
