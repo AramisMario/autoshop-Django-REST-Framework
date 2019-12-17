@@ -10,6 +10,7 @@ from apps.authregister.models import Receptionist
 from apps.authregister.models import Customers
 from apps.authregister.models import Mechanics
 from apps.service.customModelManagers.tasksmanager import TasksManager
+from apps.service.customModelManagers.servicemanager import ServiceManager
 from django.db import connection
 import datetime
 import json
@@ -57,6 +58,10 @@ class Services(models.Model):
     outdate = models.DateTimeField(db_column='outDate', blank=True, null=True)  # Field name made lowercase.
     vehicles = models.ForeignKey('Vehicles', models.DO_NOTHING)
     receptionist = models.ForeignKey(Receptionist, models.DO_NOTHING)
+
+    objects = models.Manager()
+    customManager = ServiceManager()
+
     class Meta:
         managed = False
         db_table = 'services'
