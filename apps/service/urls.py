@@ -7,4 +7,5 @@ urlpatterns = [
     path('filtertasks/',RepairFilter.as_view()),
     path('filtertasksbyref/',RepairFilterByRef.as_view()),
     path('filtertaskbytag/',RepairFilterByTag.as_view()),
+    path('estoutdate/',EstimatedOutDate.as_view()),
 ]

@@ -10,6 +10,7 @@ from apps.reception.serializers import TasksSerializer, TasksbyrefSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework import status
+
 # Create your views here.
 
 class SaveVehicle(APIView):
@@ -70,3 +71,12 @@ class  RepairFilterByTag(APIView):
         repairsSerialized = TasksSerializer(repairs,many = True)
         context = {"repairs":repairsSerialized.data}
         return Response(context,status = status.HTTP_200_OK)
+
+class EstimatedOutDate(APIView):
+    parser_classes = (JSONParser,)
+    renderer_classes = (JSONRenderer,)
+
+    def get(self, request, format = None):
+        service = Services.objects.get(pk = 3)
+        service.estimatedOutDate()
+        return Response({"context":"algo"})

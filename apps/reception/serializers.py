@@ -23,7 +23,7 @@ class TasksSerializer(serializers.ModelSerializer):
 class DetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Details
-        fields = ('description','tasks','services','mechanics')
+        fields = ('description','tasks','services','mechanics','finished')
 
     def create(self,validated_data):
         details = Details.objects.create(description = validated_data["description"],
