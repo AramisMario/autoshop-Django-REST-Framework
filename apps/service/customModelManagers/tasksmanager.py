@@ -12,5 +12,5 @@ class TasksManager(models.Manager):
         for row in cursor.fetchall():
             allowed = json.loads(row[3])
             if allowed["allow"] == 'ALL' or refId in allowed["allow"]:
-                info["reparaciones"].append({"taskId":row[0],"price":row[1],"task":row[2],})
+                info["reparaciones"].append({"taskId":row[0],"price":row[1],"task":row[2]})
         return info

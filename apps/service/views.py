@@ -55,8 +55,8 @@ class RepairFilterByRef(APIView):
     parser_classes = (JSONParser,)
     render_classes = (JSONRenderer,)
 
-    def post(self, request, format = None):
-        tasks = Tasks.customManager.tasksbyref(request.data["ref"])
+    def get(self, request, ref, format = None):
+        tasks = Tasks.customManager.tasksbyref(ref)
         return Response(tasks,status = status.HTTP_200_OK)
 
 class  RepairFilterByTag(APIView):
@@ -72,7 +72,7 @@ class  RepairFilterByTag(APIView):
         return Response(context,status = status.HTTP_200_OK)
 
 class EstimatedOutDate(APIView):
-    parser_classes = (JSONParser,)
+
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, id, format = None):
@@ -80,9 +80,8 @@ class EstimatedOutDate(APIView):
         eOutTime = service.estimatedOutDate()
         return Response({"eOutTime":eOutTime},status = status.HTTP_200_OK)
 
-
 class RepairStatus(APIView):
-    parser_classes = (JSONParser,)
+
     render_classes = (JSONRenderer,)
 
     def get(self, request, id, format = None):
@@ -91,9 +90,15 @@ class RepairStatus(APIView):
         return Response(repstatus,status = status.HTTP_200_OK)
 
 class ServicesHistory(APIView):
-    parser_classes = (JSONParser,)
+
     render_classes = (JSONRenderer,)
 
     def get(self, request, id, format = None):
         history = Services.customManager.historyByCustomer(id)
         return Response(history, status = status.HTTP_200_OK)
+
+class generateInvoice(APIView):
+    renderer_classes = (JSONRenderer,)
+    def get(self, request, id, format = None):
+        invoice = Services.customManager.invoiceByService(id)
+        return Response(invoice,status = status.HTTP_200_OK)

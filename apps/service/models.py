@@ -132,9 +132,18 @@ class Vehicles(models.Model):
         cursor = connection.cursor()
         cursor.execute("""select t.task,d.finished from vehicles as v join services as s on v.id = s.vehicles_id
         join details as d on s.id = d.services_id join tasks as t on t.id = d.tasks_id where v.id = %s;""",[self.pk])
-        info = {"repairs":[]}
+        info = {"repairs":[],"percent":0}
+        i = 0
         for row in cursor:
-            state = "Terminado" if row[1] == 1 else "No terminado"
+            # state = "Terminado" if row[1] == 1 else "No terminado"
+            state = None
+            if row[1] == 1:
+                state = "Terminado"
+                i = i + 1
+            else:
+                state = "No terminado"
             info["repairs"].append({"reparacion":row[0],"estado":state})
 
+        percent = (i*100)/len(info["repairs"])
+        info["percent"] = percent
         return info
