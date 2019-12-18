@@ -5,7 +5,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.views import APIView
 from apps.authregister.models import Mechanics, Receptionist
-from apps.authregister.customPermissionClasses import AdminPermission
+from apps.authregister.custompermissionclasses import AdminPermission
 from apps.authregister.jwtbackend import JWTAuthentication
 from apps.authregister.serializers import MechanicsSerializer, RecepcionistSerializer
 import copy

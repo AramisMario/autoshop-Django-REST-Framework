@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from apps.authregister.jwtbackend import JWTAuthentication
+from rest_framework.authentication import get_authorization_header
+from apps.authregister.custompermissionclasses import *
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser
 from apps.service.models import *
@@ -9,6 +11,8 @@ from apps.service.serializers import *
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework import status
+from rest_condition import Or
+import jwt, os
 
 # Create your views here.
 
@@ -16,7 +20,7 @@ class SaveVehicle(APIView):
 
     parser_classes = (FormParser,)
     authentication_classes = (JWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
 
     def post(self, request, format = None):
         vehicle = VehicleSerializer(data = request.data)
@@ -38,20 +42,20 @@ class ShowVehicles(APIView):
         return Response(context, status.HTTP_200_OK)
 
 class RepairFilter(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     parser_classes = (JSONParser,)
     render_classes = (JSONRenderer,)
 
-    def post(self, request, format = None):
+    def get(self, request, format = None):
         repairs = Tasksbyref.objects.all()
         repairsSerialized = TasksbyrefSerializer(repairs,many = True)
         context = {"repairs":repairsSerialized.data}
         return Response(context,status = status.HTTP_200_OK)
 
 class RepairFilterByRef(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     parser_classes = (JSONParser,)
     render_classes = (JSONRenderer,)
 
@@ -60,8 +64,8 @@ class RepairFilterByRef(APIView):
         return Response(tasks,status = status.HTTP_200_OK)
 
 class  RepairFilterByTag(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     parser_classes = (JSONParser,)
     render_classes = (JSONRenderer,)
 
@@ -73,6 +77,8 @@ class  RepairFilterByTag(APIView):
 
 class EstimatedOutDate(APIView):
 
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (CustomersPermission,)
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, id, format = None):
@@ -82,6 +88,8 @@ class EstimatedOutDate(APIView):
 
 class RepairStatus(APIView):
 
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     render_classes = (JSONRenderer,)
 
     def get(self, request, id, format = None):
@@ -91,13 +99,21 @@ class RepairStatus(APIView):
 
 class ServicesHistory(APIView):
 
+    authentication_classes = (JWTAuthentication,)
+    # permission_classes = (Or(CustomersPermission, ReceptionistPermission),)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     render_classes = (JSONRenderer,)
 
-    def get(self, request, id, format = None):
-        history = Services.customManager.historyByCustomer(id)
+    def get(self, request, format = None):
+        token = get_authorization_header(request).split()[1]
+        payload = jwt.decode(token, os.environ["SECRETKEY"])
+        history = Services.customManager.historyByCustomer(payload["id"])
         return Response(history, status = status.HTTP_200_OK)
 
 class generateInvoice(APIView):
+
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = [CustomersPermission | ReceptionistPermission]
     renderer_classes = (JSONRenderer,)
     def get(self, request, id, format = None):
         invoice = Services.customManager.invoiceByService(id)

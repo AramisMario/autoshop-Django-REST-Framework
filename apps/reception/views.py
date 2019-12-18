@@ -6,6 +6,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from apps.service.serializers import TasksbyrefSerializer, TasksSerializer, DetailsSerializer, ServicesSerializer
 from apps.service.models import Services, Tasks, Tasksbyref
+from apps.authregister.custompermissionclasses import ReceptionistPermission, CustomersPermission
+from apps.authregister.jwtbackend import JWTAuthentication
 import json
 # Create your views here.
 
@@ -13,6 +15,8 @@ import json
 class SaveTasksByRef(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = (ReceptionistPermission,)
     def post(self, request, format = None):
         request.data["refsallowed"] = json.dumps(request.data["refsallowed"])
         taskbyref = TasksbyrefSerializer(data = request.data)
@@ -24,6 +28,8 @@ class SaveTasksByRef(APIView):
 class SaveTasks(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = (ReceptionistPermission,)
     def post(self, request, format = None):
         task = TasksSerializer(data = request.data)
         if task.is_valid():
@@ -35,6 +41,8 @@ class SaveTasks(APIView):
 class SaveDetails(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = [ReceptionistPermission | CustomersPermission]
     def post(self, request, format = None):
         detail = DetailsSerializer(data = request.data)
         if detail.is_valid():
@@ -46,6 +54,8 @@ class SaveDetails(APIView):
 class ServicesView(APIView):
     parser_classes = (JSONParser,)
     renderer_classes = (JSONRenderer,)
+    autentication_classes = (JWTAuthentication,)
+    permission_classes = [ReceptionistPermission | CustomersPermission]
     def post(self, request, format = None):
         service = ServicesSerializer(data = request.data)
         if service.is_valid():

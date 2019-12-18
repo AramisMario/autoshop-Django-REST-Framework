@@ -9,6 +9,6 @@ urlpatterns = [
     path('filtertaskbytag/',RepairFilterByTag.as_view()),
     path('estmoutdate/<int:id>/',EstimatedOutDate.as_view()),
     path('rstatus/<int:id>/',RepairStatus.as_view()),
-    path('history/<int:id>/',ServicesHistory.as_view()),
+    path('history/',ServicesHistory.as_view()),
     path('invoice/<int:id>/',generateInvoice.as_view()),
 ]

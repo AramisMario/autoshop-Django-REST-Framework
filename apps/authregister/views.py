@@ -12,7 +12,10 @@ import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from apps.authregister.jwtbackend import JWTAuthentication
-from apps.authregister.customPermissionClasses import AdminPermission, CustomersPermission, MechanicsPermissions, ReceptionistPermissions
+from rest_framework.authentication import get_authorization_header
+from apps.authregister.custompermissionclasses import *
+import os
+import jwt, json
 # Create your views here.
 
 class SignUp(APIView):
@@ -68,13 +71,13 @@ class SignIn(APIView):
 
 class AuthPruebaReceptionist(APIView):
     autentication_classes = (JWTAuthentication,)
-    permission_classes = (ReceptionistPermissions,)
+    permission_classes = (ReceptionistPermission,)
     def get(self,request, format = None):
         return Response({"mensaje":"te autenticaste receptionist"})
 
 class AuthPruebaMechanic(APIView):
     autentication_classes = (JWTAuthentication,)
-    permission_classes = (MechanicsPermissions,)
+    permission_classes = (MechanicsPermission,)
     def get(self,request, format = None):
         return Response({"mensaje":"te autenticaste mechanic"})
 
