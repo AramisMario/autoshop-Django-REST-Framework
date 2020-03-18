@@ -69,7 +69,7 @@ class  RepairFilterByTag(APIView):
     parser_classes = (JSONParser,)
     render_classes = (JSONRenderer,)
 
-    def post(self, request, format = None):
+    def get(self, request, format = None):
         repairs = Tasks.objects.filter(tag__contains = request.data["tag"])
         repairsSerialized = TasksSerializer(repairs,many = True)
         context = {"repairs":repairsSerialized.data}
